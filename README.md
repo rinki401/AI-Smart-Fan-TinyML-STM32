@@ -1,23 +1,27 @@
-🌀 AI-Enabled Smart Fan (TinyML)
-This project implements an intelligent cooling system using TinyML on the STM32F103 (BluePill). The system doesn't just use static thresholds; it uses a trained machine learning model to predict the optimal fan speed based on environmental factors.
+# AI-Based Smart Fan with Auto-Cooling & Load Prediction
 
-🚀 Key Features
-Intelligent Control: Fan speed is modulated via PWM based on TinyML model inference.
+An edge-AI powered smart appliance designed for the ESP32-S3 (Xtensa LX7) SoC. This project integrates on-device TinyML inference to predict user comfort and dynamically manage fan speed, cutting power consumption while maintaining real-time responsiveness (<10 ms latency).
 
-Bare-Metal Efficiency: Entire system runs without an OS (RTOS-less) for maximum performance.
+## 🚀 Key Features
+* **Edge-AI Inference:** Deployed a quantized TinyML model running locally on ESP32-S3 to analyze temporal data from 3 sensor streams (Temperature/Humidity, Ambient Light, and PIR Motion).
+* **Deterministic Control:** Real-time motor speed adjustments via adaptive PWM control loops.
+* **Safety-Critical Fail-safes:** Built-in motor over-temperature monitoring via software interrupts and threshold callbacks.
+* **Telemetry & OTA:** Complete MQTT pipeline for reporting thermal load metrics and receiving Over-The-Air (OTA) runtime parameter tuning.
 
-Real-time Monitoring: Sensor data and AI predictions are streamed over UART for live debugging.
+## 🛠️ Tech Stack & Hardware
+* **Microcontroller:** ESP32-S3 (Xtensa LX7 dual-core)
+* **Development Framework:** ESP-IDF (Embedded C)
+* **Sensors:** DHT22 (Temp/Humidity), PIR (Motion), Photoresistor (Light)
+* **Actuator:** DC Fan driven via MOSFET/PWM logic
+* **Protocols:** MQTT, UART, I2C
 
-🧠 TinyML Implementation
-Input: Temperature & Humidity (via ADC/I2C).
+---
 
-Inference: On-device prediction using a quantized neural network model.
+## 🧠 System Architecture
 
-Output: 8-bit PWM signal to the Fan motor driver.
-
-🛠️ Hardware Setup
-MCU: STM32F103C8T6
-
-Sensor: DHT11 or Thermistor
-
-Actuator: DC Fan with L293D or MOSFET driver
+```text
+[DHT22 Sensor]   ---\
+[PIR Sensor]     ----> [Sensor Fusion Layer] -> [TinyML Inference Engine] -> [Adaptive PWM Control] -> [DC Motor]
+[Light Sensor]   ---/                                   |
+                                                        v
+                                             [MQTT Telemetry Pipeline]
