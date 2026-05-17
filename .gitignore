@@ -1,0 +1,12 @@
+# ESP-IDF build output
+build/
+sdkconfig
+sdkconfig.old
+
+# VS Code configurations
+.vscode/
+.settings/
+
+# OS junk files
+.DS_Store
+Thumbs.db
